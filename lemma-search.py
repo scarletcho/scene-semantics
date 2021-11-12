@@ -15,26 +15,26 @@ def collect_sample(sentence, query, query_pos):
     else:
         return None
 
-with open("pkl/coca-fiction.pkl", "rb") as f:
-    coca = pkl.load(f)
+coca_dict = defaultdict(list)
+query_pos = "NOUN"
 
 with open("noun-list.txt", "r") as f:
     nouns = f.read().splitlines()
 
-coca_dict = defaultdict(list)
-query_pos = "NOUN"
-
 for query in nouns:
     print('Query:', query)
-    for doc in tqdm(coca):
-        for sent in tqdm(doc.sentences, leave=False):
-            sample = collect_sample(sent, query, query_pos)
-            if sample:
-                # key = '.'.join([query, query_pos])
-                key = query
-                coca_dict[key].append(sent.text)
-            else:
-                continue
+    with open("pkl/coca-fiction-stanza.pkl", "rb") as fr:
+        try:
+            while True:
+                doc = pkl.load(fr)
+                for sent in tqdm(doc.sentences, leave=False):
+                    sample = collect_sample(sent, query, query_pos)
+                    if sample:
+                        coca_dict[query].append(sent.text)
+                    else:
+                        continue
+        except EOFError:
+            pass
 
 with open("pkl/coca-dict.pkl", "wb") as f:
     pkl.dump(coca_dict, f)

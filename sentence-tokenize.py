@@ -3,10 +3,12 @@ import os
 import pickle as pkl
 from tqdm import tqdm
 
-nlp = stanza.Pipeline(lang='en', processors='tokenize,mwt,pos,lemma', logging_level='DEBUG')
+def save_objects(objects):
+    with open('pkl/coca-fiction-stanza.pkl', 'ab') as output:  # Note: `ab` appends the data
+        pkl.dump(objects, output, pkl.HIGHEST_PROTOCOL)
 
-doc_list = []
-fiction_list = os.listdir("fiction_refined")
+nlp = stanza.Pipeline(lang='en', processors='tokenize,mwt,pos,lemma', logging_level='DEBUG')
+fiction_list = [_ for _ in os.listdir("fiction_refined") if _.endswith(".txt")]
 
 for fiction in tqdm(fiction_list):
     with open("fiction_refined/" + fiction, "r") as f:
@@ -15,8 +17,6 @@ for fiction in tqdm(fiction_list):
     in_docs = [stanza.Document([], text=d) for d in documents] # Wrap each document with a stanza.Document object
     out_docs = nlp(in_docs) # Call the neural pipeline on this list of documents
 
-    doc_list.extend(out_docs)
-
-with open("pkl/coca-fiction.pkl", "wb") as f:
-    pkl.dump(doc_list, f)
+    for d in out_docs:
+        save_objects(d)
 

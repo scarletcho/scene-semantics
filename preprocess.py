@@ -17,7 +17,7 @@ def clean_up_minimal(para):
     para = re.sub("^ +", "", para)
     return para
 
-fiction_list = os.listdir("fiction")
+fiction_list = [_ for _ in os.listdir("fiction") if _.endswith(".txt")]
 
 for fiction in tqdm(fiction_list):
     with open("fiction/" + fiction, "r") as f:
