@@ -1,6 +1,6 @@
+import os
 import re
 from tqdm import tqdm
-import os
 
 def clean_up_minimal(para):
     para = re.sub("^[#@]+\d+ ", "", para) # document number

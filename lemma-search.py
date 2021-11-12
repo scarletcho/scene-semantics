@@ -1,5 +1,5 @@
-import pickle as pkl
 from collections import defaultdict
+import pickle as pkl
 from tqdm import tqdm
 
 def collect_sample(sentence, query, query_pos):
@@ -36,6 +36,6 @@ for query in nouns:
         except EOFError:
             pass
 
-with open("pkl/coca-dict.pkl", "wb") as f:
+with open("pkl/coca-fiction-dict.pkl", "wb") as f:
     pkl.dump(coca_dict, f)
 

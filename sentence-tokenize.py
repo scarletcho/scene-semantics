@@ -1,5 +1,5 @@
-import stanza
 import os
+import stanza
 import pickle as pkl
 from tqdm import tqdm
 
